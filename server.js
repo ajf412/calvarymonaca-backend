@@ -2,12 +2,11 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const helmet = require('helmet');
 const cors = require('cors');
 
 // ________MIDDLEWARE SETUP________
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true });
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -15,7 +14,7 @@ app.use(helmet());
 app.use(cors());
 
 // ________CORS SETUP FOR PRODUCTION________
-// const CORS_WHITELIST = require('./authorization/auth');
+// const CORS_WHITELIST = require('./authorization/corsAuth');
 // const corsOptions = {
 //     origin:(origin, callback) =>
 //     CORS_WHITELIST.indexOf(origin) !== -1
@@ -48,7 +47,6 @@ const questions = require('./routes/questions');
 
 app.use('/api/members',
     cors(corsOptions),
-    passport.authenticate("jwt", { session: false }),
     members);
 
 app.use('/api/bible',
@@ -57,22 +55,18 @@ app.use('/api/bible',
 
 app.use('/api/prayers',
     cors(corsOptions),
-    passport.authenticate("jwt", { session: false }),
     prayers);
 
 app.use('/api/memberPosts',
     cors(corsOptions),
-    passport.authenticate("jwt", { session: false }),
     memberPosts);
 
 app.use('/api/comments',
     cors(corsOptions),
-    passport.authenticate("jwt", { session: false }),
     comments);
 
 app.use('/api/questions',
     cors(corsOptions),
-    passport.authenticate("jwt", { session: false }),
     questions);
 
 // ________MONGO DB CONNECTION________

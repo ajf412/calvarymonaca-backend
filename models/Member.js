@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var MemberSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true,
         unique: true,
@@ -15,6 +15,14 @@ var MemberSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+    },
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
     },
     posts: [
         {
