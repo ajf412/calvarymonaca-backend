@@ -24,6 +24,29 @@ var MemberSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    address1: {
+        type: String,
+        required: true,
+    },
+    address2: {
+        type: String,
+    },
+    city: {
+        type: String,
+        required: true,
+    },
+    state: {
+        type: String,
+        required: true,
+    },
+    zipCode: {
+        type: String,
+        required: true,
+    },
+    memberType: {
+        type: String,
+        required: true,
+    },
     isAdmin: {
         type: Boolean,
         required: true,
