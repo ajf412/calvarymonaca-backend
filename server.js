@@ -44,30 +44,35 @@ const prayers = require('./routes/prayers');
 const memberPosts = require('./routes/memberPosts');
 const comments = require('./routes/comments');
 const questions = require('./routes/questions');
+const sermons = require('./routes/sermons');
 
-app.use('/api/members',
+app.use('/members',
     cors(corsOptions),
     members);
 
-app.use('/api/bible',
+app.use('/bible',
     cors(),
     bible);
 
-app.use('/api/prayers',
+app.use('/prayers',
     cors(corsOptions),
     prayers);
 
-app.use('/api/memberPosts',
+app.use('/memberPosts',
     cors(corsOptions),
     memberPosts);
 
-app.use('/api/comments',
+app.use('/comments',
     cors(corsOptions),
     comments);
 
-app.use('/api/questions',
+app.use('/questions',
     cors(corsOptions),
     questions);
+
+app.use('/sermons',
+    cors(corsOptions),
+    sermons);
 
 // ________MONGO DB CONNECTION________
 var db = mongoose.connection;  //see 'mongoose.connect' in setup

@@ -74,6 +74,11 @@ var MemberSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    adminAccepted: {
+        type: Boolean,
+        required: true,
+        default: false,
+    }
 })
 
 
