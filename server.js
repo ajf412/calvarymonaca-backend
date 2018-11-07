@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 // ________MIDDLEWARE SETUP________
 mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true });
@@ -32,7 +34,9 @@ const corsOptions = {
 
 // ________CORS INITIALIZATION________
 const configureServer = app => {
+    app.use(helmet());
     app.use(cors(corsOptions));
+    app.use(express.json());
 };
 
 configureServer(app);
@@ -45,6 +49,24 @@ const memberPosts = require('./routes/memberPosts');
 const comments = require('./routes/comments');
 const questions = require('./routes/questions');
 const sermons = require('./routes/sermons');
+
+app.use(
+    session({
+        secret: process.env.SECRETKEY,
+        cookie: {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+        },
+        httpOnly: true,
+        secure: false,
+        resave: true,
+        saveUninitialized: false,
+        name: "GodIsWatchingYou",
+        store: new MongoStore({
+            url: 'mongodb://localhost/sessions',
+            ttl: 60 * 10,
+        })
+    })
+)
 
 app.use('/members',
     cors(corsOptions),

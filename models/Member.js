@@ -1,70 +1,82 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var MemberSchema = new mongoose.Schema({
-    username: {
+    userUsername: {
         type: String,
         required: true,
         unique: true,
     },
-    password: {
+    userPassword: {
         type: String,
         required: true,
     },
-    email: {
+    userEmail: {
         type: String,
         required: true,
         unique: true,
     },
-    firstName: {
+    userFirstName: {
         type: String,
         required: true,
     },
-    lastName: {
+    userLastName: {
         type: String,
         required: true,
     },
-    address1: {
+    userAddress1: {
         type: String,
         required: true,
     },
-    address2: {
+    userAddress2: {
         type: String,
     },
-    city: {
-        type: String,
-        required: true,
-    },
-    state: {
+    userCity: {
         type: String,
         required: true,
     },
-    zipCode: {
+    userState: {
         type: String,
         required: true,
     },
-    memberType: {
+    userZipCode: {
         type: String,
         required: true,
     },
-    isAdmin: {
+    userMembership: {
+        type: String,
+        required: true,
+    },
+    userIsSeenByOnline: {
+        type: Boolean,
+        required: true,
+    },
+    userIsAdmin: {
         type: Boolean,
         required: true,
         default: false,
     },
-    posts: [
+    userPosts: [
         {
             type: ObjectId,
             ref: "memberPost",
         }
     ],
-    comments: [
+    userComments: [
         {
             type: ObjectId,
             ref: "comment",
         }
     ],
-    questions: [
+    userBibleNotes: [
+        {
+            type: ObjectId,
+            ref: "bibleNote"
+        }
+    ],
+    userQuestions: [
         {
             type: ObjectId,
             ref: "question",
@@ -81,5 +93,21 @@ var MemberSchema = new mongoose.Schema({
     }
 })
 
+MemberSchema.pre('save', function(next) {
+    bcrypt.hash(this.password, 11, (err, hash) => {
+        if(err) {
+            return next(err);
+        }
 
-module.exports = Member = mongoose.model('member', MemberSchema);
+        this.password = hash;
+
+        return next();
+    })
+})
+
+MemberSchema.methods.isPasswordValid = function(passwordGuess) {
+    return bcrypt.compare(passwordGuess, this.password)
+}
+
+
+module.exports = mongoose.model('Member', MemberSchema);
